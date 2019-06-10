@@ -21,13 +21,11 @@ public:
 
     void DispAllDev();
 
-public slots:
-    void on_btn_conn_clicked();
-
 private slots:
     void on_btn_net_scan_clicked();
     void on_btn_enter_monitor();
-    void on_btn_add_new_dev();
+    void on_btn_add_new_dev_clicked();
+    void on_btn_conn_clicked();
 
 private:
     Ui::MainWindow *ui;

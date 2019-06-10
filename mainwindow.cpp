@@ -7,6 +7,10 @@
 
 #include <QCommandLinkButton>
 
+#include <QGridLayout>
+#include <QHBoxLayout>
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -21,26 +25,43 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(pConnDlg, SIGNAL(new_dev_connected()), this, SLOT(on_btn_conn_clicked()) );
 
+//    QGridLayout *layout = new QGridLayout;
+//    layout->addWidget(ui->groupBox, 0, 0, 1, 2);
+//    setLayout(layout);
+
+//    QHBoxLayout *layout = new QHBoxLayout;
+//    layout->addWidget(ui->groupBox);
+//    layout->setSpacing(50);
+//    layout->setContentsMargins(0, 0, 50, 100);
+//    setLayout(layout);
+
 //    ui->Btn_SetNetInterface->setIcon(QIcon("../ge_monitor/res/ico/net_interface.png"));
 
     // 新建一个扫描按钮
-    QPushButton *btn_net_scan = new QPushButton(this);
-    btn_net_scan->move(10, 15);
-    btn_net_scan->resize(80, 30);
-    btn_net_scan->setText(QObject::tr("网络扫描"));
-    btn_net_scan->setIcon(QIcon("../ge_monitor/res/ico/net_interface.png"));
-    btn_net_scan->show();
-    connect( btn_net_scan, &QPushButton::clicked, this, &MainWindow::on_btn_net_scan_clicked );
+//    QPushButton *btn_net_scan = new QPushButton(this);
+//    btn_net_scan->move(10, 15);
+//    btn_net_scan->resize(80, 30);
+//    btn_net_scan->setText(QObject::tr("网络扫描"));
+//    btn_net_scan->setIcon(QIcon("../ge_monitor/res/ico/net_interface.png"));
+//    btn_net_scan->show();
+//    connect( btn_net_scan, &QPushButton::clicked, this, &MainWindow::on_btn_net_scan_clicked );
+
+//    connect( ui->MainWindow::btn_net_scan, &QPushButton::clicked, this, &MainWindow::on_btn_net_scan_clicked );
+
+    ui->MainWindow::btn_net_scan->setIcon(QIcon("../ge_monitor/res/ico/net_interface.png"));
 
     // 新建一个添加设备按钮
-    QPushButton *btn = new QPushButton(this);
-    btn->move(100, 15);
-    btn->resize(80, 30);
-    btn->setText(QObject::tr("添加设备"));
-    btn->setIcon(QIcon("../ge_monitor/res/ico/add.png"));
-    btn->show();
+//    QPushButton *btn = new QPushButton(this);
+//    btn->move(100, 15);
+//    btn->resize(80, 30);
+//    btn->setText(QObject::tr("添加设备"));
+//    btn->setIcon(QIcon("../ge_monitor/res/ico/add.png"));
+//    btn->show();
 
-    connect( btn, &QPushButton::clicked, this, &MainWindow::on_btn_add_new_dev );
+//    connect( btn, &QPushButton::clicked, this, &MainWindow::on_btn_add_new_dev );
+
+    ui->MainWindow::btn_add_new_dev->setIcon(QIcon("../ge_monitor/res/ico/add.png"));
+
 
 //    // 新建一个添加设备按钮
 //    QPushButton *btn = new QPushButton(this);
@@ -61,16 +82,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::DispAllDev()
 {
-    quint16 x,y,w,h;
-    quint16 gpbox_x, gpbox_y, gpbox_w, gpbox_h;
+    int x,y,w,h;
+    int gpbox_x, gpbox_y, gpbox_w, gpbox_h;
     quint16 num_of_each_row;
+
+    QRect rect = ui->groupBox->geometry();
 
     gpbox_x = ui->groupBox->x();
     gpbox_y = ui->groupBox->y();
     gpbox_w = ui->groupBox->width();
     gpbox_h = ui->groupBox->height();
 
-    num_of_each_row = gpbox_w / WIDTH;
+    num_of_each_row = (quint16)gpbox_w / WIDTH;
+
+qDebug() << "gpbox, x, y, w, h " << gpbox_x << gpbox_y << gpbox_w << gpbox_h;
+qDebug() << "qrect, w: " << ui->groupBox->geometry().size().width();
+qDebug() << "qrect, h: " << ui->groupBox->geometry().size().height();
+qDebug() << "mainwindow, w: " << this->width();
+
 
     for( quint16 i = 0; i < mo_dev_list.size(); i++  )
     {
@@ -91,6 +120,8 @@ void MainWindow::DispAllDev()
         mo_dev_list[i]->resize(w, h);
         mo_dev_list[i]->setIcon(QIcon("../ge_monitor/res/ico/add.png"));
         mo_dev_list[i]->show();
+
+        qDebug() << "i: " << i;
     }
 }
 
@@ -122,8 +153,9 @@ void MainWindow::on_btn_conn_clicked()
 //    clbtn->move(20, 80);
 //    clbtn->resize(120, 120);
 //    clbtn->setText(QObject::tr("设备一"));
-//    clbtn->show();
+    //    clbtn->show();
 }
+
 
 void MainWindow::on_btn_net_scan_clicked()
 {
@@ -155,7 +187,7 @@ void MainWindow::on_btn_enter_monitor()
     //    pMonitorWindow->show();
 }
 
-void MainWindow::on_btn_add_new_dev()
+void MainWindow::on_btn_add_new_dev_clicked()
 {
    pConnDlg->show();
 }
