@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include "rt_monitor/connect_dialog.h"
 #include <QList>
+#include "widget.h"
 
 
 namespace Ui {
@@ -25,7 +26,7 @@ private slots:
     void on_btn_net_scan_clicked();
     void on_btn_enter_monitor();
     void on_btn_add_new_dev_clicked();
-    void on_btn_conn_clicked();
+    void on_btn_conn_clicked(const QString &ip);
 
 private:
     Ui::MainWindow *ui;
@@ -34,6 +35,7 @@ private:
     QList<QPushButton*> mo_dev_list;
 
     Connect_Dialog *pConnDlg = nullptr;
+    Widget *m_pMacScanWidget = nullptr;
 };
 
 #endif // MAINWINDOW_H

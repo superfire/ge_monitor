@@ -16,13 +16,14 @@ public:
     ~Connect_Dialog();
 
 signals:
-    void new_dev_connected();
+    void new_dev_connected(const QString &ip);  // signal的参数必须是const型，并且所有相关的函数也必须是const
 
 private slots:
     void on_button_TcpClient_clicked();
 
 private:
     Ui::Connect_Dialog *ui;
+    QString m_NewIp;
 };
 
 #endif // CONNECT_DIALOG_H

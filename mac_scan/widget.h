@@ -10,6 +10,8 @@
 #include "arpsendthread.h"
 #include "arpacceptthread.h"
 #include "updatemacthread.h"
+#include <QMenu>
+#include <QAction>
 
 using namespace std;
 
@@ -29,6 +31,7 @@ private:
     void fillAdapterInfo();
 signals:
     void stopScan();
+    void add_new_dev(const QString &ip);
 
 private slots:
     void on_scanButton_clicked();
@@ -38,6 +41,9 @@ private slots:
     void on_clearButton_clicked();
 
 //    void on_updateButton_clicked();
+
+    void on_macList_customContextMenuRequested(const QPoint &pos);
+    void addAction();
 
 private:
     Ui::Widget *ui;
@@ -61,6 +67,11 @@ private:
 
     // 记录扫描到的网卡数量
     int mMacNum = 0;
+
+    // 右键菜单
+    QMenu *m_pMacListContexMenu = nullptr;
+    QAction *m_pAddAction;
+    QString m_CurIp;
 };
 
 #endif // WIDGET_H

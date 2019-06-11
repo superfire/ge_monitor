@@ -7,6 +7,8 @@ Connect_Dialog::Connect_Dialog(QWidget *parent) :
     ui(new Ui::Connect_Dialog)
 {
     ui->setupUi(this);
+
+    m_NewIp = "192.168.1.1";  // for test
 }
 
 Connect_Dialog::~Connect_Dialog()
@@ -18,5 +20,5 @@ void Connect_Dialog::on_button_TcpClient_clicked()
 {
     close();
 
-    emit new_dev_connected();
+    emit new_dev_connected(m_NewIp);
 }

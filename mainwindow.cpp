@@ -9,7 +9,7 @@
 
 #include <QGridLayout>
 #include <QHBoxLayout>
-
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,8 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     u16_dev_rank = 0;
 
     pConnDlg = new Connect_Dialog(this);
+    m_pMacScanWidget = new Widget();
 
-    connect(pConnDlg, SIGNAL(new_dev_connected()), this, SLOT(on_btn_conn_clicked()) );
+    connect(pConnDlg, SIGNAL(new_dev_connected(QString)), this, SLOT(on_btn_conn_clicked(QString)) );
+    connect(m_pMacScanWidget, SIGNAL(add_new_dev(QString)), this, SLOT(on_btn_conn_clicked(QString)) );
+
 
 //    QGridLayout *layout = new QGridLayout;
 //    layout->addWidget(ui->groupBox, 0, 0, 1, 2);
@@ -126,8 +129,10 @@ qDebug() << "mainwindow, w: " << this->width();
 }
 
 
-void MainWindow::on_btn_conn_clicked()
+void MainWindow::on_btn_conn_clicked(const QString &ip)
 {
+    qDebug() << "ip: " << ip;
+
     // 创建一个设备，添加到设备列表里
     QPushButton *pBtn = new QPushButton(this);
     mo_dev_list.append(pBtn);
@@ -159,9 +164,11 @@ void MainWindow::on_btn_conn_clicked()
 
 void MainWindow::on_btn_net_scan_clicked()
 {
-    Widget *pw = new Widget();
-    pw->setWindowModality(Qt::ApplicationModal);
-    pw->show();
+//    Widget *pw = new Widget();
+//    pw->setWindowModality(Qt::ApplicationModal);
+//    pw->show();
+    m_pMacScanWidget->setWindowModality(Qt::ApplicationModal);
+    m_pMacScanWidget->show();
 }
 
 void MainWindow::on_btn_enter_monitor()

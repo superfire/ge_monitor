@@ -109,6 +109,12 @@ Widget::Widget(QWidget *parent) :
     ui->macList->setColumnWidth(2, 200);
     ui->macList->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    // mac列表，右键功能
+    m_pMacListContexMenu = new QMenu(this);
+    m_pAddAction = new QAction("添加到监控", this);
+    m_pMacListContexMenu->addAction(m_pAddAction);
+
+    connect(m_pAddAction, SIGNAL(triggered()), this, SLOT(addAction()));
 }
 
 Widget::~Widget()
@@ -203,6 +209,7 @@ void Widget::on_scanButton_clicked()
         ui->macList->insertRow(0);
         QTableWidgetItem *item1 = new QTableWidgetItem(info["ip"]);
         ui->macList->setItem(0, 0, item1);
+        qDebug() << "item1 text: " << item1->text();
 
         QTableWidgetItem *item2 = new QTableWidgetItem(info["mac"]);
         ui->macList->setItem(0, 1, item2);
@@ -298,3 +305,24 @@ void Widget::on_updateButton_clicked()
     });
 }
 #endif
+
+
+void Widget::on_macList_customContextMenuRequested(const QPoint &pos)
+{
+    // 判断鼠标所在位置是否有item
+//    if( ui->macList->itemAt( mapFromGlobal( QCursor::pos() ) ) != NULL )
+//    if( ui->macList->itemAt( pos ) != NULL )
+    if( ui->macList->itemAt( pos ) != NULL )
+    {
+        m_CurIp = ui->macList->itemAt( pos )->text();
+        m_pMacListContexMenu->exec( QCursor::pos() );
+    }
+}
+
+void Widget::addAction()
+{
+    qDebug() << "add action";
+
+    emit add_new_dev( m_CurIp );
+    qDebug() << "new dev ip: " << m_CurIp;
+}
