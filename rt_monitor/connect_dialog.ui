@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>558</width>
-    <height>114</height>
+    <height>348</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -152,6 +152,16 @@
      </layout>
     </item>
    </layout>
+  </widget>
+  <widget class="QMdiArea" name="mdiArea">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>120</y>
+     <width>381</width>
+     <height>160</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

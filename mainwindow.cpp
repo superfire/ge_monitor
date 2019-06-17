@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(pConnDlg, SIGNAL(new_dev_connected(QString)), this, SLOT(on_btn_conn_clicked(QString)) );
     connect(m_pMacScanWidget, SIGNAL(add_new_dev(QString)), this, SLOT(on_btn_conn_clicked(QString)) );
 
+    ui->mainToolBar->addAction(ui->action_NetScan);
+    ui->mainToolBar->addAction(ui->action_AddDev);
+    ui->mainToolBar->hide();
 
 //    QGridLayout *layout = new QGridLayout;
 //    layout->addWidget(ui->groupBox, 0, 0, 1, 2);
@@ -51,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    connect( ui->MainWindow::btn_net_scan, &QPushButton::clicked, this, &MainWindow::on_btn_net_scan_clicked );
 
-    ui->MainWindow::btn_net_scan->setIcon(QIcon("../ge_monitor/res/ico/net_interface.png"));
+//    ui->MainWindow::btn_net_scan->setIcon(QIcon("../ge_monitor/res/ico/net_interface.png"));
 
     // 新建一个添加设备按钮
 //    QPushButton *btn = new QPushButton(this);
@@ -63,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    connect( btn, &QPushButton::clicked, this, &MainWindow::on_btn_add_new_dev );
 
-    ui->MainWindow::btn_add_new_dev->setIcon(QIcon("../ge_monitor/res/ico/add.png"));
+//    ui->MainWindow::btn_add_new_dev->setIcon(QIcon("../ge_monitor/res/ico/add.png"));
 
 
 //    // 新建一个添加设备按钮
@@ -82,12 +85,17 @@ MainWindow::~MainWindow()
 
 #define    WIDTH    ((quint16)120)
 #define    HEIGHT   ((quint16)120)
+#define    SPACE    ((quint16)10)
 
 void MainWindow::DispAllDev()
 {
     int x,y,w,h;
     int gpbox_x, gpbox_y, gpbox_w, gpbox_h;
-    quint16 num_of_each_row;
+    quint16 temp_num, num_of_each_row;
+    bool is_row_add = false;
+
+    u16_dev_row = 0;
+    num_of_each_row = 0;
 
     QRect rect = ui->groupBox->geometry();
 
@@ -96,28 +104,40 @@ void MainWindow::DispAllDev()
     gpbox_w = ui->groupBox->width();
     gpbox_h = ui->groupBox->height();
 
+//    temp_num = (quint16)gpbox_w / WIDTH;
+
+//    qDebug() << "temp_num: " << temp_num;
+
+//    for( quint32 i = 1; i <= temp_num; i++ )
+//    {
+//        if( (i * (WIDTH + 10)) > gpbox_w )
+//        {
+//            num_of_each_row = i - 1;
+//            if( num_of_each_row > temp_num )
+//                num_of_each_row = temp_num;
+
+//            qDebug() << "i: " << i;
+//            break;
+//        }
+//    }
+
     num_of_each_row = (quint16)gpbox_w / WIDTH;
+    num_of_each_row = num_of_each_row - ( (( num_of_each_row) * SPACE) / WIDTH );
 
-qDebug() << "gpbox, x, y, w, h " << gpbox_x << gpbox_y << gpbox_w << gpbox_h;
-qDebug() << "qrect, w: " << ui->groupBox->geometry().size().width();
-qDebug() << "qrect, h: " << ui->groupBox->geometry().size().height();
-qDebug() << "mainwindow, w: " << this->width();
+//qDebug() << "gpbox, x, y, w, h " << gpbox_x << gpbox_y << gpbox_w << gpbox_h;
+//qDebug() << "qrect, w: " << ui->groupBox->geometry().size().width();
+//qDebug() << "qrect, h: " << ui->groupBox->geometry().size().height();
+//qDebug() << "mainwindow, w: " << this->width();
 
-
-    for( quint16 i = 0; i < mo_dev_list.size(); i++  )
+    for( quint16 i = 0; i < mo_dev_list.size(); i++ )
     {
-        x = gpbox_x + 10 + u16_dev_num * WIDTH + u16_dev_num * 10;
-        y = gpbox_y + 30;
+        if( ( i != 0 ) && ( ( i % num_of_each_row ) == 0 ) )
+            u16_dev_row++;
+
+        x = gpbox_x + 10 + (i % num_of_each_row) * WIDTH + (i % num_of_each_row) * 10;
+        y = gpbox_y + 50 + u16_dev_row * HEIGHT + u16_dev_row * 10;
         w = WIDTH;
         h = WIDTH;
-
-        if( x >= gpbox_w )
-        {
-            u16_dev_row ++;
-            x = u16_dev_num - num_of_each_row * u16_dev_row;
-            x = gpbox_x + 10 + x * WIDTH + x * 10;
-            y = gpbox_y + 30 + u16_dev_row * HEIGHT + u16_dev_row * 10;
-        }
 
         mo_dev_list[i]->move(x, y);
         mo_dev_list[i]->resize(w, h);
@@ -125,6 +145,10 @@ qDebug() << "mainwindow, w: " << this->width();
         mo_dev_list[i]->show();
 
         qDebug() << "i: " << i;
+
+        qDebug() << "text: " << mo_dev_list[i]->text();
+        qDebug() << "row: " << u16_dev_row;
+        qDebug() << "num of each row: " << num_of_each_row;
     }
 }
 
@@ -135,6 +159,8 @@ void MainWindow::on_btn_conn_clicked(const QString &ip)
 
     // 创建一个设备，添加到设备列表里
     QPushButton *pBtn = new QPushButton(this);
+    QString str = "dev_" + QString::number(u16_dev_num);
+    pBtn->setText( str );
     mo_dev_list.append(pBtn);
     connect( pBtn, SIGNAL(clicked()), this, SLOT(on_btn_enter_monitor()) );
 
@@ -142,7 +168,7 @@ void MainWindow::on_btn_conn_clicked(const QString &ip)
     DispAllDev();
 
     u16_dev_num ++;
-    qDebug() << "num: " << u16_dev_num;
+//    qDebug() << "num: " << u16_dev_num;
 
     // 新建一个添加设备按钮
 //    QPushButton *btn = new QPushButton(this);
@@ -198,3 +224,22 @@ void MainWindow::on_btn_add_new_dev_clicked()
 {
    pConnDlg->show();
 }
+
+void MainWindow::on_action_NetScan_triggered()
+{
+    m_pMacScanWidget->setWindowModality(Qt::ApplicationModal);
+    m_pMacScanWidget->show();
+}
+
+void MainWindow::on_action_AddDev_triggered()
+{
+     pConnDlg->show();
+}
+
+void MainWindow::resizeEvent( QResizeEvent *event )
+{
+    qDebug() << "size changes";
+    // 重新显示设备窗口
+    DispAllDev();
+}
+

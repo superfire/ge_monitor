@@ -6,6 +6,7 @@
 #include "rt_monitor/connect_dialog.h"
 #include <QList>
 #include "widget.h"
+#include <QCloseEvent>
 
 
 namespace Ui {
@@ -19,6 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void resizeEvent( QResizeEvent *event );
 
     void DispAllDev();
 
@@ -27,6 +29,10 @@ private slots:
     void on_btn_enter_monitor();
     void on_btn_add_new_dev_clicked();
     void on_btn_conn_clicked(const QString &ip);
+
+    void on_action_NetScan_triggered();
+
+    void on_action_AddDev_triggered();
 
 private:
     Ui::MainWindow *ui;

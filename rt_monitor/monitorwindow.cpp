@@ -736,3 +736,9 @@ void MonitorWindow::on_pushButton_clicked()
     return;
 }
 
+void MonitorWindow::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "close";
+    QueryTimer->stop();
+    MonitorTimer->stop();
+}

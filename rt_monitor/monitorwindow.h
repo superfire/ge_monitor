@@ -174,8 +174,10 @@ signals:
 public:
     explicit MonitorWindow(QWidget *parent  = nullptr);
     ~MonitorWindow();
+    void closeEvent(QCloseEvent *event);
 
     void disp_bat_info(void);
+
 
 private:
     Ui::MonitorWindow *ui;
@@ -193,9 +195,9 @@ private:
     QString messageTCP = "[TCP] ";
     QTextBrowser *QTextDispTab[BAT_NUM];
 
-    QTimer *QueryTimer = nullptr;
-    QTimer *MonitorTimer = nullptr;
-    QTimer *CurrentSysTime = nullptr;
+    QTimer *QueryTimer = nullptr;    // 查询时间
+    QTimer *MonitorTimer = nullptr;  // 监控时间
+    QTimer *CurrentSysTime = nullptr; // 当前系统时间
 
     Sys_TimeDef m_monitor_time;
 };

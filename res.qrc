@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>res/images/add.png</file>
+        <file>res/images/logo.ico</file>
+        <file>res/images/net_interface.png</file>
+    </qresource>
+</RCC>
